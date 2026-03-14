@@ -21,7 +21,7 @@ async function startServer() {
   // User Sync
   app.post("/api/users/sync", async (req, res) => {
     const { uid, name, email, photoURL } = req.body;
-    const SUPER_ADMIN_EMAIL = "samxsalve1@gmail.com";
+    const SUPER_ADMIN_EMAILS = ["samxsalve1@gmail.com", "info@azariahmg.com"];
     
     try {
       const user = await prisma.user.upsert({
@@ -29,10 +29,10 @@ async function startServer() {
         update: { name, photoURL },
         create: { 
           id: uid, 
-          name, 
+          name: name || email.split('@')[0], 
           email, 
           photoURL, 
-          role: email === SUPER_ADMIN_EMAIL ? 'super_admin' : 'team_member' 
+          role: SUPER_ADMIN_EMAILS.includes(email) ? 'super_admin' : 'team_member' 
         },
       });
       res.json(user);

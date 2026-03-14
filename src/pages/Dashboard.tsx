@@ -64,7 +64,7 @@ const Dashboard = () => {
 
   const taskStatusData = [
     { name: 'Pending', value: tasks.filter(t => t.status === 'pending').length, color: '#94a3b8' },
-    { name: 'In Progress', value: tasks.filter(t => t.status === 'in_progress').length, color: '#6366f1' },
+    { name: 'In Progress', value: tasks.filter(t => t.status === 'in_progress').length, color: '#3b82f6' },
     { name: 'Review', value: tasks.filter(t => t.status === 'review').length, color: '#f59e0b' },
     { name: 'Completed', value: tasks.filter(t => t.status === 'completed').length, color: '#10b981' },
   ];
@@ -76,7 +76,7 @@ const Dashboard = () => {
 
   if (loading) return (
     <div className="flex items-center justify-center h-[60vh]">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
     </div>
   );
 
@@ -87,8 +87,8 @@ const Dashboard = () => {
         animate={{ opacity: 1, x: 0 }}
         className="flex items-center gap-4"
       >
-        <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-          <Zap className="w-6 h-6 text-indigo-400" />
+        <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+          <Zap className="w-6 h-6 text-blue-400" />
         </div>
         <div>
           <h1 className="text-4xl font-bold shining-text">Enterprise Dashboard</h1>
@@ -141,9 +141,9 @@ const Dashboard = () => {
                 <YAxis axisLine={false} tickLine={false} tick={{fill: 'rgba(255,255,255,0.4)', fontSize: 10}} />
                 <Tooltip 
                   cursor={{fill: 'rgba(255,255,255,0.05)'}}
-                  contentStyle={{backgroundColor: 'rgba(15,15,15,0.9)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)'}}
+                  contentStyle={{backgroundColor: 'rgba(2, 6, 23, 0.9)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)'}}
                 />
-                <Bar dataKey="progress" fill="#6366f1" radius={[6, 6, 0, 0]} barSize={32} />
+                <Bar dataKey="progress" fill="#3b82f6" radius={[6, 6, 0, 0]} barSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -200,7 +200,7 @@ const Dashboard = () => {
         >
           <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5">
             <h3 className="font-bold">Active Projects</h3>
-            <button className="text-indigo-400 text-xs font-bold uppercase tracking-widest hover:text-indigo-300 transition-colors">View All</button>
+            <button className="text-blue-400 text-xs font-bold uppercase tracking-widest hover:text-blue-300 transition-colors">View All</button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
@@ -234,7 +234,7 @@ const Dashboard = () => {
                           initial={{ width: 0 }}
                           animate={{ width: `${project.progress || 0}%` }}
                           transition={{ duration: 1, delay: 0.8 }}
-                          className="bg-indigo-500 h-full"
+                          className="bg-blue-500 h-full"
                         ></motion.div>
                       </div>
                       <span className="text-[10px] font-bold text-white/30 mt-1.5 block">{project.progress || 0}%</span>
@@ -265,13 +265,13 @@ const Dashboard = () => {
             {activities.length > 0 ? activities.map((activity) => (
               <div key={activity.id} className="flex gap-4 group">
                 <div className="relative">
-                  <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center z-10 relative group-hover:border-indigo-500/50 transition-colors">
-                    <TrendingUp className="w-4 h-4 text-white/40 group-hover:text-indigo-400 transition-colors" />
+                  <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center z-10 relative group-hover:border-blue-500/50 transition-colors">
+                    <TrendingUp className="w-4 h-4 text-white/40 group-hover:text-blue-400 transition-colors" />
                   </div>
                   <div className="absolute top-8 left-4 w-px h-full bg-white/5 -translate-x-1/2"></div>
                 </div>
                 <div>
-                  <p className="text-sm font-semibold group-hover:text-indigo-300 transition-colors">{activity.action}</p>
+                  <p className="text-sm font-semibold group-hover:text-blue-300 transition-colors">{activity.action}</p>
                   <p className="text-[10px] text-white/30 font-bold uppercase tracking-widest mt-1.5">{format(new Date(activity.timestamp), 'h:mm a')}</p>
                 </div>
               </div>
@@ -281,7 +281,7 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          <button className="w-full mt-10 py-3 text-xs font-bold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded-xl hover:bg-indigo-500/20 transition-all">
+          <button className="w-full mt-10 py-3 text-xs font-bold uppercase tracking-widest text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded-xl hover:bg-blue-500/20 transition-all">
             View Audit Log
           </button>
         </motion.div>

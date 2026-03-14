@@ -121,7 +121,7 @@ const Tasks = () => {
         </motion.div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20 active:scale-95"
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95"
         >
           <Plus className="w-5 h-5" />
           Add Task
@@ -136,7 +136,7 @@ const Tasks = () => {
             <input 
               type="text" 
               placeholder="Search tasks..." 
-              className="w-full pl-12 pr-4 py-2.5 bg-white/5 border border-white/5 rounded-xl text-sm focus:outline-none focus:border-indigo-500/50 transition-all placeholder:text-white/20"
+              className="w-full pl-12 pr-4 py-2.5 bg-white/5 border border-white/5 rounded-xl text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/20"
             />
           </div>
           <div className="flex gap-2">
@@ -166,7 +166,7 @@ const Tasks = () => {
               {loading ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 mx-auto"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
                   </td>
                 </tr>
               ) : tasks.map((task, idx) => (
@@ -179,7 +179,7 @@ const Tasks = () => {
                 >
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/20 group-hover:bg-indigo-500/10 group-hover:text-indigo-400 group-hover:border-indigo-500/20 transition-all">
+                      <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/20 group-hover:bg-blue-500/10 group-hover:text-blue-400 group-hover:border-blue-500/20 transition-all">
                         <Tag className="w-4 h-4" />
                       </div>
                       <span className="font-semibold">{task.title}</span>
@@ -192,7 +192,7 @@ const Tasks = () => {
                   </td>
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-indigo-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-indigo-400">
+                      <div className="w-7 h-7 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-blue-400">
                         {users.find(u => u.uid === task.assignedTo)?.name?.charAt(0) || '?'}
                       </div>
                       <span className="text-xs text-white/60 font-medium">
@@ -258,7 +258,7 @@ const Tasks = () => {
                     required
                     value={newTitle}
                     onChange={e => setNewTitle(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all"
                     placeholder="e.g. Design system documentation"
                   />
                 </div>
@@ -269,11 +269,11 @@ const Tasks = () => {
                       required
                       value={newProjectId}
                       onChange={e => setNewProjectId(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all text-white/60"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
                     >
-                      <option value="" className="bg-[#1a1a1a]">Select Project</option>
+                      <option value="" className="bg-[#020617]">Select Project</option>
                       {projects.map(p => (
-                        <option key={p.id} value={p.id} className="bg-[#1a1a1a]">{p.name}</option>
+                        <option key={p.id} value={p.id} className="bg-[#020617]">{p.name}</option>
                       ))}
                     </select>
                   </div>
@@ -283,11 +283,11 @@ const Tasks = () => {
                       required
                       value={newAssignedTo}
                       onChange={e => setNewAssignedTo(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all text-white/60"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
                     >
-                      <option value="" className="bg-[#1a1a1a]">Select Assignee</option>
+                      <option value="" className="bg-[#020617]">Select Assignee</option>
                       {users.map(u => (
-                        <option key={u.uid} value={u.uid} className="bg-[#1a1a1a]">{u.name}</option>
+                        <option key={u.uid} value={u.uid} className="bg-[#020617]">{u.name}</option>
                       ))}
                     </select>
                   </div>
@@ -300,7 +300,7 @@ const Tasks = () => {
                       value={newDueDate}
                       onChange={e => setNewDueDate(e.target.value)}
                       type="date" 
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all text-white/60"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
                     />
                   </div>
                   <div>
@@ -308,18 +308,18 @@ const Tasks = () => {
                     <select 
                       value={newPriority}
                       onChange={e => setNewPriority(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all text-white/60"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
                     >
-                      <option value="low" className="bg-[#1a1a1a]">Low</option>
-                      <option value="medium" className="bg-[#1a1a1a]">Medium</option>
-                      <option value="high" className="bg-[#1a1a1a]">High</option>
-                      <option value="urgent" className="bg-[#1a1a1a]">Urgent</option>
+                      <option value="low" className="bg-[#020617]">Low</option>
+                      <option value="medium" className="bg-[#020617]">Medium</option>
+                      <option value="high" className="bg-[#020617]">High</option>
+                      <option value="urgent" className="bg-[#020617]">Urgent</option>
                     </select>
                   </div>
                 </div>
                 <button 
                   type="submit"
-                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.98] mt-4"
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98] mt-4"
                 >
                   Create Task
                 </button>

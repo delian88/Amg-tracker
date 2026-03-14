@@ -94,20 +94,20 @@ const Projects = () => {
           <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
             <button 
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'text-white/40 hover:text-white'}`}
+              className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-white/40 hover:text-white'}`}
             >
               <LayoutGrid className="w-5 h-5" />
             </button>
             <button 
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'text-white/40 hover:text-white'}`}
+              className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-white/40 hover:text-white'}`}
             >
               <ListIcon className="w-5 h-5" />
             </button>
           </div>
           <button 
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20 active:scale-95"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95"
           >
             <Plus className="w-5 h-5" />
             New Project
@@ -122,7 +122,7 @@ const Projects = () => {
           <input 
             type="text" 
             placeholder="Search projects..." 
-            className="w-full pl-12 pr-4 py-2.5 bg-white/5 border border-white/5 rounded-xl text-sm focus:outline-none focus:border-indigo-500/50 transition-all placeholder:text-white/20"
+            className="w-full pl-12 pr-4 py-2.5 bg-white/5 border border-white/5 rounded-xl text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/20"
           />
         </div>
         <div className="flex gap-3 w-full md:w-auto">
@@ -130,17 +130,17 @@ const Projects = () => {
             <Filter className="w-4 h-4" />
             Filter
           </button>
-          <select className="bg-white/5 border border-white/5 rounded-xl px-4 py-2.5 text-sm font-medium text-white/60 focus:outline-none focus:border-indigo-500/50">
-            <option className="bg-[#1a1a1a]">All Status</option>
-            <option className="bg-[#1a1a1a]">Active</option>
-            <option className="bg-[#1a1a1a]">Completed</option>
+          <select className="bg-white/5 border border-white/5 rounded-xl px-4 py-2.5 text-sm font-medium text-white/60 focus:outline-none focus:border-blue-500/50">
+            <option className="bg-[#020617]">All Status</option>
+            <option className="bg-[#020617]">Active</option>
+            <option className="bg-[#020617]">Completed</option>
           </select>
         </div>
       </div>
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
       ) : (
         <AnimatePresence mode="popLayout">
@@ -158,7 +158,7 @@ const Projects = () => {
                   className="glass-card p-6 group"
                 >
                   <div className="flex justify-between items-start mb-6">
-                    <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 group-hover:scale-110 transition-transform">
+                    <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:scale-110 transition-transform">
                       <Zap className="w-6 h-6" />
                     </div>
                     <button className="text-white/20 hover:text-white transition-colors">
@@ -166,20 +166,20 @@ const Projects = () => {
                     </button>
                   </div>
                   
-                  <h3 className="text-xl font-bold mb-1 group-hover:text-indigo-300 transition-colors">{project.name}</h3>
+                  <h3 className="text-xl font-bold mb-1 group-hover:text-blue-300 transition-colors">{project.name}</h3>
                   <p className="text-white/40 text-sm mb-6">{project.client}</p>
                   
                   <div className="space-y-4 mb-8">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-white/40 font-bold uppercase tracking-widest">Progress</span>
-                      <span className="font-bold text-indigo-400">{project.progress || 0}%</span>
+                      <span className="font-bold text-blue-400">{project.progress || 0}%</span>
                     </div>
                     <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${project.progress || 0}%` }}
                         transition={{ duration: 1, delay: 0.5 }}
-                        className="bg-indigo-500 h-full shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+                        className="bg-blue-500 h-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                       ></motion.div>
                     </div>
                   </div>
@@ -276,7 +276,7 @@ const Projects = () => {
                     required
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all"
                     placeholder="e.g. Q1 Infrastructure Upgrade"
                   />
                 </div>
@@ -286,7 +286,7 @@ const Projects = () => {
                     required
                     value={newClient}
                     onChange={(e) => setNewClient(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all"
                     placeholder="e.g. Global Tech Solutions"
                   />
                 </div>
@@ -298,7 +298,7 @@ const Projects = () => {
                       type="date"
                       value={newDeadline}
                       onChange={(e) => setNewDeadline(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all text-white/60"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
                     />
                   </div>
                   <div>
@@ -308,14 +308,14 @@ const Projects = () => {
                       type="number"
                       value={newBudget}
                       onChange={(e) => setNewBudget(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-all"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all"
                       placeholder="50000"
                     />
                   </div>
                 </div>
                 <button 
                   type="submit"
-                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.98] mt-4"
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98] mt-4"
                 >
                   Create Project
                 </button>

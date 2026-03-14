@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             uid: firebaseUser.uid,
-            name: firebaseUser.displayName,
+            name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
             email: firebaseUser.email,
             photoURL: firebaseUser.photoURL
           })

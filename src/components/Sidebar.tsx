@@ -46,7 +46,7 @@ const Sidebar = () => {
     <aside className="w-64 glass-card m-4 mr-0 flex flex-col h-[calc(100vh-2rem)] sticky top-4">
       <div className="p-6">
         <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
             <Zap className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -63,7 +63,7 @@ const Sidebar = () => {
               className={({ isActive }) => cn(
                 "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 group",
                 isActive 
-                  ? "bg-indigo-600 text-white shadow-xl shadow-indigo-500/20" 
+                  ? "bg-blue-600 text-white shadow-xl shadow-blue-500/20" 
                   : "text-white/50 hover:bg-white/5 hover:text-white"
               )}
             >
@@ -79,16 +79,16 @@ const Sidebar = () => {
 
       <div className="mt-auto p-6 border-t border-white/5">
         <div className="flex items-center gap-3 mb-6 p-3 rounded-xl bg-white/5 border border-white/10">
-          <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center overflow-hidden border border-white/10">
+          <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center overflow-hidden border border-white/10">
             {profile?.photoURL ? (
               <img src={profile.photoURL} alt={profile.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             ) : (
-              <span className="text-indigo-400 font-medium">{profile?.name?.charAt(0)}</span>
+              <span className="text-blue-400 font-medium">{profile?.name?.charAt(0)}</span>
             )}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-white truncate">{profile?.name}</p>
-            <p className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider truncate">
+            <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider truncate">
               {profile?.role?.replace('_', ' ')}
             </p>
           </div>
