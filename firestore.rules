@@ -1,0 +1,168 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: users
+// Fields:
+//   - uid: string (required)
+//   - name: string (required)
+//   - email: string (required)
+//   - role: string (required, enum: super_admin, project_manager, team_member, viewer)
+//   - createdAt: timestamp (required)
+//   - photoURL: string (optional)
+//
+// Collection: projects
+// Fields:
+//   - name: string (required)
+//   - client: string (optional)
+//   - description: string (optional)
+//   - managerId: string (required)
+//   - startDate: timestamp (optional)
+//   - deadline: timestamp (required)
+//   - status: string (required, enum: active, completed, archived, delayed)
+//   - budget: number (optional)
+//   - priority: string (optional)
+//   - progress: number (optional)
+//   - createdAt: timestamp (required)
+//
+// Collection: tasks
+// Fields:
+//   - projectId: string (required)
+//   - title: string (required)
+//   - description: string (optional)
+//   - assignedTo: string (required)
+//   - startDate: timestamp (optional)
+//   - dueDate: timestamp (required)
+//   - status: string (required, enum: pending, in_progress, review, completed, overdue)
+//   - priority: string (optional)
+//   - progress: number (optional)
+//   - createdAt: timestamp (required)
+//
+// Collection: notifications
+// Fields:
+//   - userId: string (required)
+//   - message: string (required)
+//   - type: string (required)
+//   - read: boolean (required)
+//   - createdAt: timestamp (required)
+//   - relatedEntityId: string (optional)
+//
+// Collection: activityLogs
+// Fields:
+//   - userId: string (required)
+//   - action: string (required)
+//   - entityType: string (required)
+//   - entityId: string (required)
+//   - timestamp: timestamp (required)
+//   - details: string (optional)
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && getUserData().role == role;
+    }
+
+    function isAdmin() {
+      return hasRole('super_admin') || (request.auth.token.email == "samxsalve1@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    function isPM() {
+      return hasRole('project_manager') || isAdmin();
+    }
+
+    function isTeamMember() {
+      return hasRole('team_member') || isPM();
+    }
+
+    function isViewer() {
+      return isAuthenticated();
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'name', 'email', 'role', 'createdAt']) &&
+             data.uid is string &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.email is string &&
+             data.role in ['super_admin', 'project_manager', 'team_member', 'viewer'] &&
+             data.createdAt is timestamp;
+    }
+
+    function isValidProject(data) {
+      return data.keys().hasAll(['name', 'managerId', 'status', 'deadline', 'createdAt']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 200 &&
+             data.managerId is string &&
+             data.status in ['active', 'completed', 'archived', 'delayed'] &&
+             data.deadline is timestamp &&
+             data.createdAt is timestamp;
+    }
+
+    function isValidTask(data) {
+      return data.keys().hasAll(['projectId', 'title', 'assignedTo', 'status', 'dueDate', 'createdAt']) &&
+             data.projectId is string &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 200 &&
+             data.assignedTo is string &&
+             data.status in ['pending', 'in_progress', 'review', 'completed', 'overdue'] &&
+             data.dueDate is timestamp &&
+             data.createdAt is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isOwner(userId) && isValidUser(request.resource.data) && (request.resource.data.role != 'super_admin' || isAdmin());
+      allow update: if isAuthenticated() && (isOwner(userId) || isAdmin()) && isValidUser(request.resource.data) && (request.resource.data.role == resource.data.role || isAdmin());
+    }
+
+    match /projects/{projectId} {
+      allow read: if isAuthenticated();
+      allow create: if isPM() && isValidProject(request.resource.data);
+      allow update: if isPM() && isValidProject(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated();
+      allow create: if isPM() && isValidTask(request.resource.data);
+      allow update: if isTeamMember() && isValidTask(request.resource.data);
+      allow delete: if isPM();
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated(); // System or other users can notify
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+    }
+
+    match /activityLogs/{logId} {
+      allow read: if isPM();
+      allow create: if isAuthenticated();
+    }
+
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

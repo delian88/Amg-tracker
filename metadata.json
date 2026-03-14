@@ -1,0 +1,9 @@
+{
+  "name": "AMG Project Tracker",
+  "description": "A professional enterprise project and task management system for Azariah Management Group, featuring real-time tracking, task assignments, and automated deadline notifications.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
