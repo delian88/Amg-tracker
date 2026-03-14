@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { collection, onSnapshot, query } from 'firebase/firestore';
-import { db } from '../firebase';
 import { Project, Task } from '../types';
 import { 
   BarChart, 
@@ -24,18 +22,23 @@ const Analytics = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    const unsubProjects = onSnapshot(collection(db, 'projects'), (snap) => {
-      setProjects(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project)));
-    });
-
-    const unsubTasks = onSnapshot(collection(db, 'tasks'), (snap) => {
-      setTasks(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Task)));
-    });
-
-    return () => {
-      unsubProjects();
-      unsubTasks();
+    const fetchData = async () => {
+      try {
+        const [projectsRes, tasksRes] = await Promise.all([
+          fetch('/api/projects'),
+          fetch('/api/tasks')
+        ]);
+        const [projectsData, tasksData] = await Promise.all([
+          projectsRes.json(),
+          tasksRes.json()
+        ]);
+        setProjects(projectsData);
+        setTasks(tasksData);
+      } catch (err) {
+        console.error("Analytics fetch error:", err);
+      }
     };
+    fetchData();
   }, []);
 
   const projectStatusData = [

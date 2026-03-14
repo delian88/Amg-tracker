@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  super_admin
+  project_manager
+  team_member
+  viewer
+}
+
+model User {
+  id        String   @id // Firebase UID
+  name      String
+  email     String   @unique
+  role      Role     @default(team_member)
+  photoURL  String?
+  createdAt DateTime @default(now())
+  
+  managedProjects Project[] @relation("ProjectManager")
+  assignedTasks   Task[]    @relation("TaskAssignee")
+  notifications   Notification[]
+  activityLogs    ActivityLog[]
+}
+
+enum ProjectStatus {
+  active
+  completed
+  archived
+  delayed
+}
+
+enum Priority {
+  low
+  medium
+  high
+  urgent
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  client      String?
+  description String?
+  managerId   String
+  manager     User          @relation("ProjectManager", fields: [managerId], references: [id])
+  startDate   DateTime?
+  deadline    DateTime
+  status      ProjectStatus @default(active)
+  budget      Float?
+  priority    Priority      @default(medium)
+  progress    Float         @default(0)
+  createdAt   DateTime      @default(now())
+  
+  tasks       Task[]
+}
+
+enum TaskStatus {
+  pending
+  in_progress
+  review
+  completed
+  overdue
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  projectId   String
+  project     Project    @relation(fields: [projectId], references: [id])
+  title       String
+  description String?
+  assignedTo  String
+  assignee    User       @relation("TaskAssignee", fields: [assignedTo], references: [id])
+  startDate   DateTime?
+  dueDate     DateTime
+  status      TaskStatus @default(pending)
+  priority    Priority   @default(medium)
+  progress    Float      @default(0)
+  createdAt   DateTime   @default(now())
+}
+
+model Notification {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  message         String
+  type            String
+  read            Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  relatedEntityId String?
+}
+
+model ActivityLog {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  action     String
+  entityType String
+  entityId   String
+  timestamp  DateTime @default(now())
+  details    String?
+}

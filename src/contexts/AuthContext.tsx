@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { auth, db } from '../firebase';
+import { auth } from '../firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { doc, onSnapshot } from 'firebase/firestore';
 import { UserProfile } from '../types';
 
 interface AuthContextType {
@@ -25,17 +24,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        const userDoc = doc(db, 'users', firebaseUser.uid);
-        const unsubProfile = onSnapshot(userDoc, (doc) => {
-          if (doc.exists()) {
-            setProfile({ ...doc.data() as UserProfile, uid: doc.id });
-          }
-          setLoading(false);
-        }, (error) => {
-          console.error("Error fetching profile:", error);
-          setLoading(false);
-        });
-        return () => unsubProfile();
+        // Sync with backend
+        fetch('/api/users/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid: firebaseUser.uid,
+            name: firebaseUser.displayName,
+            email: firebaseUser.email,
+            photoURL: firebaseUser.photoURL
+          })
+        }).then(res => res.json())
+          .then(data => setProfile(data))
+          .catch(err => console.error("Sync error:", err));
+
+        setLoading(false);
       } else {
         setProfile(null);
         setLoading(false);
