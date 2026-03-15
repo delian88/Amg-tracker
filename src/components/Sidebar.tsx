@@ -14,7 +14,6 @@ import {
   Zap
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { auth } from '../firebase';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -23,11 +22,11 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const Sidebar = () => {
-  const { profile } = useAuth();
+  const { profile, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await auth.signOut();
+  const handleLogout = () => {
+    logout();
     navigate('/login');
   };
 

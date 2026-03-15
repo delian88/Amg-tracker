@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { auth } from '../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Zap, ShieldCheck, Globe, ArrowRight, Mail, Lock } from 'lucide-react';
+import { Zap, ShieldCheck, Globe, Mail, Lock } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const Login = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,10 +18,9 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await login(email, password);
       navigate('/');
     } catch (error: any) {
-      console.error("Email login failed:", error);
       setError(error.message || "Invalid credentials. Please try again.");
     }
   };

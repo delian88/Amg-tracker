@@ -20,58 +20,44 @@ async function startServer() {
 
   // User Sync
   app.post("/api/users/sync", async (req, res) => {
-    const { uid, name, email, photoURL } = req.body;
-    const SUPER_ADMIN_EMAILS = ["samxsalve1@gmail.com", "info@azariahmg.com"];
+    const { uid, name, email } = req.body;
+    
+    const HARDCODED_USERS = [
+      { email: 'info@azariahmg.com', role: 'super_admin' },
+      { email: 'chiffon@azariahmg.com', role: 'team_member' },
+      { email: 'Dele@azariahmg.com', role: 'team_member' },
+      { email: 'Joseph@azariahmg.com', role: 'team_member' },
+    ];
     
     try {
       // Check if user already exists
-      const existingUser = await prisma.user.findUnique({
+      let user = await prisma.user.findUnique({
         where: { id: uid },
       });
 
-      // If user doesn't exist by UID, check if they exist by email (pre-added by admin)
-      if (!existingUser) {
-        const userByEmail = await prisma.user.findUnique({
-          where: { email },
+      if (!user) {
+        const hardcodedUser = HARDCODED_USERS.find(u => u.email === email);
+        
+        if (!hardcodedUser) {
+          return res.status(403).json({ error: "Access denied. Your account has not been authorized." });
+        }
+
+        user = await prisma.user.create({
+          data: {
+            id: uid,
+            name: name || email.split('@')[0],
+            email,
+            role: hardcodedUser.role as any
+          }
         });
-
-        if (!userByEmail && !SUPER_ADMIN_EMAILS.includes(email)) {
-          return res.status(403).json({ error: "Access denied. Your account has not been authorized by an administrator." });
-        }
-
-        // If they were pre-added by email, update their record with the Firebase UID
-        if (userByEmail) {
-          const updatedUser = await prisma.user.update({
-            where: { email },
-            data: { 
-              id: uid, // Set the UID from Firebase
-              name: name || userByEmail.name || email.split('@')[0],
-              photoURL: photoURL || userByEmail.photoURL
-            },
-          });
-          return res.json(updatedUser);
-        }
-
-        // Fallback for Super Admins if they aren't in DB yet
-        if (SUPER_ADMIN_EMAILS.includes(email)) {
-          const newUser = await prisma.user.create({
-            data: {
-              id: uid,
-              name: name || email.split('@')[0],
-              email,
-              photoURL,
-              role: 'super_admin'
-            }
-          });
-          return res.json(newUser);
-        }
+      } else {
+        // Update existing user
+        user = await prisma.user.update({
+          where: { id: uid },
+          data: { name },
+        });
       }
-
-      // If user exists, just update their profile
-      const user = await prisma.user.update({
-        where: { id: uid },
-        data: { name, photoURL },
-      });
+      
       res.json(user);
     } catch (error) {
       console.error("Sync error:", error);
