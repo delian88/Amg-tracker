@@ -4,11 +4,8 @@ import {
   LayoutDashboard, 
   Briefcase, 
   CheckSquare, 
-  Calendar, 
   Bell, 
-  Settings, 
   LogOut,
-  Users,
   BarChart3,
   ShieldCheck,
   Zap
@@ -39,8 +36,9 @@ const Sidebar = () => {
           console.error("Failed to fetch notifications:", err);
         }
       };
+
       fetchNotifications();
-      const interval = setInterval(fetchNotifications, 30000); // Poll every 30s
+      const interval = setInterval(fetchNotifications, 30000);
       return () => clearInterval(interval);
     }
   }, [profile]);
@@ -63,37 +61,44 @@ const Sidebar = () => {
   }
 
   return (
-    <aside className="w-64 glass-card m-4 mr-0 flex flex-col h-[calc(100vh-2rem)] sticky top-4">
+    <aside className="w-64 bg-white lg:bg-transparent flex flex-col h-full lg:h-[calc(100vh-2rem)] lg:m-4 lg:mr-0 shadow-lg lg:shadow-none rounded-none lg:rounded-xl">
+
+      {/* Logo */}
       <div className="p-6">
-        <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
             <Zap className="w-6 h-6 text-white" />
           </div>
+
           <div>
-            <h1 className="font-bold text-slate-900 leading-none tracking-tight shining-text text-lg">AMG Tracker</h1>
-            <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest font-bold">Azariah Management</p>
+            <h1 className="font-bold text-slate-900 text-lg">AMG Tracker</h1>
+            <p className="text-[10px] text-slate-400 uppercase tracking-widest">
+              Azariah Management
+            </p>
           </div>
         </div>
 
-        <nav className="space-y-2">
+        {/* Navigation */}
+        <nav className="space-y-1">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
-              className={({ isActive }) => cn(
-                "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 group",
-                isActive 
-                  ? "bg-blue-600 text-white shadow-xl shadow-blue-500/20" 
-                  : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
-              )}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition",
+                  isActive
+                    ? "bg-blue-600 text-white"
+                    : "text-slate-600 hover:bg-slate-100"
+                )
+              }
             >
-              <item.icon className={cn(
-                "w-5 h-5 transition-transform duration-300 group-hover:scale-110",
-                "text-current opacity-70"
-              )} />
+              <item.icon className="w-5 h-5 opacity-80" />
+
               {item.label}
+
               {item.badge && (
-                <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                <span className="ml-auto bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full">
                   {item.badge}
                 </span>
               )}
@@ -102,30 +107,44 @@ const Sidebar = () => {
         </nav>
       </div>
 
+      {/* Profile Section */}
       <div className="mt-auto p-6 border-t border-slate-100">
-        <div className="flex items-center gap-3 mb-6 p-3 rounded-xl bg-slate-50 border border-slate-100">
-          <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center overflow-hidden border border-slate-200">
+
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center overflow-hidden">
             {profile?.photoURL ? (
-              <img src={profile.photoURL} alt={profile.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+              <img
+                src={profile.photoURL}
+                alt={profile.name}
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
             ) : (
-              <span className="text-blue-600 font-medium">{profile?.name?.charAt(0)}</span>
+              <span className="text-blue-600 font-medium">
+                {profile?.name?.charAt(0)}
+              </span>
             )}
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-900 truncate">{profile?.name}</p>
-            <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider truncate">
+
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-slate-900 truncate">
+              {profile?.name}
+            </p>
+            <p className="text-[10px] text-emerald-600 uppercase font-bold">
               {profile?.role?.replace('_', ' ')}
             </p>
           </div>
         </div>
+
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-sm font-medium text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all duration-300 group"
+          className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 transition"
         >
-          <LogOut className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+          <LogOut className="w-5 h-5" />
           Sign Out
         </button>
       </div>
+
     </aside>
   );
 };
