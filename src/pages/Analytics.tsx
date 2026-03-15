@@ -50,7 +50,17 @@ const Analytics = () => {
     { name: 'Archived', value: projects.filter(p => p.status === 'archived').length || 0 },
   ].filter(d => d.value > 0);
 
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#94a3b8'];
+  const teamWorkloadData = tasks.reduce((acc: any[], task) => {
+    const existing = acc.find(item => item.name === task.assignedTo);
+    if (existing) {
+      existing.tasks += 1;
+    } else {
+      acc.push({ name: task.assignedTo, tasks: 1 });
+    }
+    return acc;
+  }, []).sort((a, b) => b.tasks - a.tasks);
+
+  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
   if (loading) {
     return (
@@ -113,9 +123,9 @@ const Analytics = () => {
           <h3 className="text-lg font-bold mb-6 text-slate-900">Team Workload (Tasks Assigned)</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={[{name: 'Team A', tasks: 12}, {name: 'Team B', tasks: 19}, {name: 'Team C', tasks: 8}]}>
+              <BarChart data={teamWorkloadData.length > 0 ? teamWorkloadData : [{name: 'No Data', tasks: 0}]}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'rgba(0,0,0,0.4)', fontSize: 12 }} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'rgba(0,0,0,0.4)', fontSize: 10 }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(0,0,0,0.4)', fontSize: 12 }} />
                 <Tooltip 
                   cursor={{ fill: 'rgba(0,0,0,0.02)' }}

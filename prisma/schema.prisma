@@ -3,22 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-enum Role {
-  super_admin
-  project_manager
-  team_member
-  viewer
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
   id        String   @id // Firebase UID
   name      String
   email     String   @unique
-  role      Role     @default(team_member)
+  role      String   @default("team_member")
   photoURL  String?
   createdAt DateTime @default(now())
   
@@ -26,20 +19,6 @@ model User {
   assignedTasks   Task[]    @relation("TaskAssignee")
   notifications   Notification[]
   activityLogs    ActivityLog[]
-}
-
-enum ProjectStatus {
-  active
-  completed
-  archived
-  delayed
-}
-
-enum Priority {
-  low
-  medium
-  high
-  urgent
 }
 
 model Project {
@@ -51,21 +30,13 @@ model Project {
   manager     User          @relation("ProjectManager", fields: [managerId], references: [id])
   startDate   DateTime?
   deadline    DateTime
-  status      ProjectStatus @default(active)
+  status      String        @default("active")
   budget      Float?
-  priority    Priority      @default(medium)
+  priority    String        @default("medium")
   progress    Float         @default(0)
   createdAt   DateTime      @default(now())
   
   tasks       Task[]
-}
-
-enum TaskStatus {
-  pending
-  in_progress
-  review
-  completed
-  overdue
 }
 
 model Task {
@@ -78,8 +49,8 @@ model Task {
   assignee    User       @relation("TaskAssignee", fields: [assignedTo], references: [id])
   startDate   DateTime?
   dueDate     DateTime
-  status      TaskStatus @default(pending)
-  priority    Priority   @default(medium)
+  status      String     @default("pending")
+  priority    String     @default("medium")
   progress    Float      @default(0)
   createdAt   DateTime   @default(now())
 }

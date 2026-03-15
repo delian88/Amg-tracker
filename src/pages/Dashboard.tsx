@@ -34,18 +34,38 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [projectsRes, tasksRes] = await Promise.all([
+        const [projectsRes, tasksRes, activitiesRes] = await Promise.all([
           fetch('/api/projects'),
-          fetch('/api/tasks')
+          fetch('/api/tasks'),
+          fetch('/api/activities')
         ]);
         
-        const [projectsData, tasksData] = await Promise.all([
+        const [projectsData, tasksData, activitiesData] = await Promise.all([
           projectsRes.json(),
-          tasksRes.json()
+          tasksRes.json(),
+          activitiesRes.json()
         ]);
 
-        setProjects(projectsData);
-        setTasks(tasksData);
+        if (Array.isArray(projectsData)) {
+          setProjects(projectsData);
+        } else {
+          console.error("Projects data is not an array:", projectsData);
+          setProjects([]);
+        }
+
+        if (Array.isArray(tasksData)) {
+          setTasks(tasksData);
+        } else {
+          console.error("Tasks data is not an array:", tasksData);
+          setTasks([]);
+        }
+
+        if (Array.isArray(activitiesData)) {
+          setActivities(activitiesData);
+        } else {
+          console.error("Activities data is not an array:", activitiesData);
+          setActivities([]);
+        }
       } catch (err) {
         console.error("Dashboard fetch error:", err);
       } finally {

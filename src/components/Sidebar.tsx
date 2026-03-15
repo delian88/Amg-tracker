@@ -24,6 +24,26 @@ function cn(...inputs: ClassValue[]) {
 const Sidebar = () => {
   const { profile, logout } = useAuth();
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = React.useState(0);
+
+  React.useEffect(() => {
+    if (profile) {
+      const fetchNotifications = async () => {
+        try {
+          const res = await fetch(`/api/notifications?userId=${profile.uid}`);
+          if (res.ok) {
+            const data = await res.json();
+            setUnreadCount(data.filter((n: any) => !n.read).length);
+          }
+        } catch (err) {
+          console.error("Failed to fetch notifications:", err);
+        }
+      };
+      fetchNotifications();
+      const interval = setInterval(fetchNotifications, 30000); // Poll every 30s
+      return () => clearInterval(interval);
+    }
+  }, [profile]);
 
   const handleLogout = () => {
     logout();
@@ -35,6 +55,7 @@ const Sidebar = () => {
     { icon: Briefcase, label: 'Projects', path: '/projects' },
     { icon: CheckSquare, label: 'Tasks', path: '/tasks' },
     { icon: BarChart3, label: 'Analytics', path: '/analytics' },
+    { icon: Bell, label: 'Notifications', path: '/notifications', badge: unreadCount > 0 ? unreadCount : undefined },
   ];
 
   if (profile?.role === 'super_admin') {
@@ -71,6 +92,11 @@ const Sidebar = () => {
                 "text-current opacity-70"
               )} />
               {item.label}
+              {item.badge && (
+                <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                  {item.badge}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

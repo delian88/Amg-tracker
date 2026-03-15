@@ -35,9 +35,15 @@ const Projects = () => {
       try {
         const res = await fetch('/api/projects');
         const data = await res.json();
-        setProjects(data);
+        if (Array.isArray(data)) {
+          setProjects(data);
+        } else {
+          console.error("Projects data is not an array:", data);
+          setProjects([]);
+        }
       } catch (err) {
         console.error("Fetch projects error:", err);
+        setProjects([]);
       } finally {
         setLoading(false);
       }
@@ -161,9 +167,50 @@ const Projects = () => {
                     <div className="p-3 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 group-hover:scale-110 transition-transform">
                       <Zap className="w-6 h-6" />
                     </div>
-                    <button className="text-slate-300 hover:text-slate-600 transition-colors">
-                      <MoreVertical className="w-5 h-5" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <select 
+                        value={project.status}
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+                          try {
+                            const res = await fetch(`/api/projects/${project.id}`, {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ status: newStatus })
+                            });
+                            if (res.ok) {
+                              const updatedProj = await res.json();
+                              setProjects(projects.map(p => p.id === project.id ? updatedProj : p));
+                            }
+                          } catch (err) {
+                            console.error("Failed to update project status:", err);
+                          }
+                        }}
+                        className="bg-slate-50 border border-slate-100 rounded-lg px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600 focus:outline-none focus:border-blue-500/50"
+                      >
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                        <option value="archived">Archived</option>
+                        <option value="delayed">Delayed</option>
+                      </select>
+                      <button 
+                        onClick={async () => {
+                          if (confirm('Are you sure you want to delete this project? All associated tasks will also be deleted.')) {
+                            try {
+                              const res = await fetch(`/api/projects/${project.id}`, { method: 'DELETE' });
+                              if (res.ok) {
+                                setProjects(projects.filter(p => p.id !== project.id));
+                              }
+                            } catch (err) {
+                              console.error("Failed to delete project:", err);
+                            }
+                          }
+                        }}
+                        className="p-2 hover:bg-red-50 rounded-lg transition-all text-slate-300 hover:text-red-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                   
                   <h3 className="text-xl font-bold mb-1 text-slate-900 group-hover:text-blue-600 transition-colors">{project.name}</h3>
@@ -220,12 +267,34 @@ const Projects = () => {
                         <div className="text-xs text-slate-400">{project.client}</div>
                       </td>
                       <td className="px-6 py-5">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider
-                          ${project.status === 'active' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
-                            project.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 
-                            'bg-slate-50 text-slate-400 border border-slate-100'}`}>
-                          {project.status}
-                        </span>
+                        <select 
+                          value={project.status}
+                          onChange={async (e) => {
+                            const newStatus = e.target.value;
+                            try {
+                              const res = await fetch(`/api/projects/${project.id}`, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ status: newStatus })
+                              });
+                              if (res.ok) {
+                                const updatedProj = await res.json();
+                                setProjects(projects.map(p => p.id === project.id ? updatedProj : p));
+                              }
+                            } catch (err) {
+                              console.error("Failed to update project status:", err);
+                            }
+                          }}
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider focus:outline-none focus:ring-1 focus:ring-blue-500/50 cursor-pointer
+                            ${project.status === 'active' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
+                              project.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 
+                              'bg-slate-50 text-slate-400 border border-slate-100'}`}
+                        >
+                          <option value="active">Active</option>
+                          <option value="completed">Completed</option>
+                          <option value="archived">Archived</option>
+                          <option value="delayed">Delayed</option>
+                        </select>
                       </td>
                       <td className="px-6 py-5 text-sm font-medium text-slate-600">
                         ${project.budget?.toLocaleString()}
@@ -234,9 +303,28 @@ const Projects = () => {
                         {new Date(project.deadline).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-5 text-right">
-                        <button className="p-2 hover:bg-blue-50 rounded-lg transition-all group-hover:translate-x-1">
-                          <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-blue-600" />
-                        </button>
+                        <div className="flex items-center justify-end gap-2">
+                          <button 
+                            onClick={async () => {
+                              if (confirm('Are you sure you want to delete this project? All associated tasks will also be deleted.')) {
+                                try {
+                                  const res = await fetch(`/api/projects/${project.id}`, { method: 'DELETE' });
+                                  if (res.ok) {
+                                    setProjects(projects.filter(p => p.id !== project.id));
+                                  }
+                                } catch (err) {
+                                  console.error("Failed to delete project:", err);
+                                }
+                              }
+                            }}
+                            className="p-2 hover:bg-red-50 rounded-lg transition-all text-slate-300 hover:text-red-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                          <button className="p-2 hover:bg-blue-50 rounded-lg transition-all group-hover:translate-x-1">
+                            <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-blue-600" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

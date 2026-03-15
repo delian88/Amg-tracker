@@ -8,6 +8,7 @@ import Projects from './pages/Projects';
 import Tasks from './pages/Tasks';
 import Analytics from './pages/Analytics';
 import UserManagement from './pages/UserManagement';
+import Notifications from './pages/Notifications';
 
 // Placeholder pages
 const Placeholder = ({ title }: { title: string }) => (
@@ -30,7 +31,7 @@ function App() {
             <Route path="tasks" element={<Tasks />} />
             <Route path="calendar" element={<Placeholder title="Calendar View" />} />
             <Route path="analytics" element={<Analytics />} />
-            <Route path="notifications" element={<Placeholder title="Notifications" />} />
+            <Route path="notifications" element={<Notifications />} />
             <Route path="management" element={<UserManagement />} />
             <Route path="settings" element={<Placeholder title="Admin Settings" />} />
           </Route>

@@ -48,9 +48,26 @@ const Tasks = () => {
           usersRes.json()
         ]);
 
-        setTasks(tasksData);
-        setProjects(projectsData);
-        setUsers(usersData);
+        if (Array.isArray(tasksData)) {
+          setTasks(tasksData);
+        } else {
+          console.error("Tasks data is not an array:", tasksData);
+          setTasks([]);
+        }
+
+        if (Array.isArray(projectsData)) {
+          setProjects(projectsData);
+        } else {
+          console.error("Projects data is not an array:", projectsData);
+          setProjects([]);
+        }
+
+        if (Array.isArray(usersData)) {
+          setUsers(usersData);
+        } else {
+          console.error("Users data is not an array:", usersData);
+          setUsers([]);
+        }
       } catch (err) {
         console.error("Fetch tasks data error:", err);
       } finally {
@@ -213,14 +230,57 @@ const Tasks = () => {
                   </td>
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-2">
-                      {getStatusIcon(task.status)}
-                      <span className="text-xs text-slate-600 font-medium capitalize">{task.status.replace('_', ' ')}</span>
+                      <select 
+                        value={task.status}
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+                          try {
+                            const res = await fetch(`/api/tasks/${task.id}`, {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ status: newStatus })
+                            });
+                            if (res.ok) {
+                              const updatedTask = await res.json();
+                              setTasks(tasks.map(t => t.id === task.id ? updatedTask : t));
+                            }
+                          } catch (err) {
+                            console.error("Failed to update task status:", err);
+                          }
+                        }}
+                        className="bg-transparent border-none text-xs text-slate-600 font-medium capitalize focus:ring-0 cursor-pointer hover:text-blue-600 transition-colors"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="review">Review</option>
+                        <option value="completed">Completed</option>
+                        <option value="overdue">Overdue</option>
+                      </select>
                     </div>
                   </td>
                   <td className="px-6 py-5 text-right">
-                    <button className="p-2 hover:bg-blue-50 rounded-lg transition-all group-hover:translate-x-1">
-                      <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-blue-600" />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button 
+                        onClick={async () => {
+                          if (confirm('Are you sure you want to delete this task?')) {
+                            try {
+                              const res = await fetch(`/api/tasks/${task.id}`, { method: 'DELETE' });
+                              if (res.ok) {
+                                setTasks(tasks.filter(t => t.id !== task.id));
+                              }
+                            } catch (err) {
+                              console.error("Failed to delete task:", err);
+                            }
+                          }
+                        }}
+                        className="p-2 hover:bg-red-50 rounded-lg transition-all text-slate-300 hover:text-red-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      <button className="p-2 hover:bg-blue-50 rounded-lg transition-all group-hover:translate-x-1">
+                        <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-blue-600" />
+                      </button>
+                    </div>
                   </td>
                 </motion.tr>
               ))}

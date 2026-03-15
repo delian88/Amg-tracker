@@ -12,8 +12,8 @@ interface AuthContextType {
 const HARDCODED_USERS = [
   { email: 'info@azariahmg.com', password: 'Admin@webmaster$123', role: 'super_admin', name: 'Super Admin' },
   { email: 'chiffon@azariahmg.com', password: '12345', role: 'team_member', name: 'Chiffon' },
-  { email: 'Dele@azariahmg.com', password: '12345', role: 'team_member', name: 'Dele' },
-  { email: 'Joseph@azariahmg.com', password: '12345', role: 'team_member', name: 'Joseph' },
+  { email: 'dele@azariahmg.com', password: '12345', role: 'team_member', name: 'Dele' },
+  { email: 'joseph@azariahmg.com', password: '12345', role: 'team_member', name: 'Joseph' },
 ];
 
 export const AuthContext = React.createContext<AuthContextType>({
@@ -64,7 +64,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const login = async (email: string, password: string) => {
-    const foundUser = HARDCODED_USERS.find(u => u.email === email && u.password === password);
+    const normalizedEmail = email.toLowerCase();
+    const foundUser = HARDCODED_USERS.find(u => u.email === normalizedEmail && u.password === password);
     
     if (foundUser) {
       const userData = { email: foundUser.email, uid: foundUser.email.replace(/[@.]/g, '_') };

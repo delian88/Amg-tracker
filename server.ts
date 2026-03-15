@@ -2,7 +2,7 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
-import { prisma } from "./src/lib/prisma.js";
+import { prisma } from "./src/lib/prisma";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,44 +21,59 @@ async function startServer() {
   // User Sync
   app.post("/api/users/sync", async (req, res) => {
     const { uid, name, email } = req.body;
+    const normalizedEmail = email?.toLowerCase();
     
     const HARDCODED_USERS = [
       { email: 'info@azariahmg.com', role: 'super_admin' },
       { email: 'chiffon@azariahmg.com', role: 'team_member' },
-      { email: 'Dele@azariahmg.com', role: 'team_member' },
-      { email: 'Joseph@azariahmg.com', role: 'team_member' },
+      { email: 'dele@azariahmg.com', role: 'team_member' },
+      { email: 'joseph@azariahmg.com', role: 'team_member' },
     ];
     
     try {
-      // Check if user already exists
+      if (!normalizedEmail) {
+        return res.status(400).json({ error: "Email is required" });
+      }
+
+      const hardcodedUser = HARDCODED_USERS.find(u => u.email === normalizedEmail);
+      
+      if (!hardcodedUser) {
+        return res.status(403).json({ error: "Access denied. Your account has not been authorized." });
+      }
+
+      // Check by email first to avoid unique constraint violations
       let user = await prisma.user.findUnique({
-        where: { id: uid },
+        where: { email: normalizedEmail },
       });
 
-      if (!user) {
-        const hardcodedUser = HARDCODED_USERS.find(u => u.email === email);
-        
-        if (!hardcodedUser) {
-          return res.status(403).json({ error: "Access denied. Your account has not been authorized." });
-        }
-
+      if (user) {
+        // Update existing user
+        user = await prisma.user.update({
+          where: { email: normalizedEmail },
+          data: { 
+            name: name || user.name,
+            // If the ID in DB is different from what client sent, we stick with DB ID
+            // but in our case they should be the same.
+          },
+        });
+      } else {
+        // Create new user
         user = await prisma.user.create({
           data: {
             id: uid,
-            name: name || email.split('@')[0],
-            email,
+            name: name || normalizedEmail.split('@')[0],
+            email: normalizedEmail,
             role: hardcodedUser.role as any
           }
         });
-      } else {
-        // Update existing user
-        user = await prisma.user.update({
-          where: { id: uid },
-          data: { name },
-        });
       }
       
-      res.json(user);
+      const userResponse = {
+        ...user,
+        uid: user.id
+      };
+      
+      res.json(userResponse);
     } catch (error) {
       console.error("Sync error:", error);
       res.status(500).json({ error: "Failed to sync user" });
@@ -103,16 +118,59 @@ async function startServer() {
 
   app.post("/api/projects", async (req, res) => {
     try {
+      const { managerId, ...rest } = req.body;
       const project = await prisma.project.create({
         data: {
-          ...req.body,
+          ...rest,
+          managerId,
           deadline: new Date(req.body.deadline),
           startDate: req.body.startDate ? new Date(req.body.startDate) : null,
         }
       });
+
+      // Log activity
+      await prisma.activityLog.create({
+        data: {
+          userId: managerId,
+          action: `Created project: ${project.name}`,
+          entityType: 'project',
+          entityId: project.id,
+        }
+      });
+
       res.json(project);
     } catch (error) {
+      console.error("Project creation error:", error);
       res.status(500).json({ error: "Failed to create project" });
+    }
+  });
+
+  app.patch("/api/projects/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+      const project = await prisma.project.update({
+        where: { id },
+        data: {
+          ...req.body,
+          deadline: req.body.deadline ? new Date(req.body.deadline) : undefined,
+          startDate: req.body.startDate ? new Date(req.body.startDate) : undefined,
+        }
+      });
+      res.json(project);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update project" });
+    }
+  });
+
+  app.delete("/api/projects/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+      // Delete associated tasks first
+      await prisma.task.deleteMany({ where: { projectId: id } });
+      await prisma.project.delete({ where: { id } });
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete project" });
     }
   });
 
@@ -131,16 +189,108 @@ async function startServer() {
 
   app.post("/api/tasks", async (req, res) => {
     try {
+      const { assignedTo, ...rest } = req.body;
       const task = await prisma.task.create({
         data: {
-          ...req.body,
+          ...rest,
+          assignedTo,
           dueDate: new Date(req.body.dueDate),
           startDate: req.body.startDate ? new Date(req.body.startDate) : null,
         }
       });
+
+      // Log activity
+      await prisma.activityLog.create({
+        data: {
+          userId: assignedTo, // Or the creator, but assignedTo is a good start
+          action: `Assigned task: ${task.title}`,
+          entityType: 'task',
+          entityId: task.id,
+        }
+      });
+
+      // Create notification
+      await prisma.notification.create({
+        data: {
+          userId: assignedTo,
+          message: `You have been assigned a new task: ${task.title}`,
+          type: 'task_assignment',
+          relatedEntityId: task.id
+        }
+      });
+
       res.json(task);
     } catch (error) {
+      console.error("Task creation error:", error);
       res.status(500).json({ error: "Failed to create task" });
+    }
+  });
+
+  app.patch("/api/tasks/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+      const task = await prisma.task.update({
+        where: { id },
+        data: {
+          ...req.body,
+          dueDate: req.body.dueDate ? new Date(req.body.dueDate) : undefined,
+          startDate: req.body.startDate ? new Date(req.body.startDate) : undefined,
+        }
+      });
+      res.json(task);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update task" });
+    }
+  });
+
+  app.delete("/api/tasks/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+      await prisma.task.delete({ where: { id } });
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete task" });
+    }
+  });
+
+  // Activities
+  app.get("/api/activities", async (req, res) => {
+    try {
+      const activities = await prisma.activityLog.findMany({
+        include: { user: true },
+        orderBy: { timestamp: 'desc' },
+        take: 20
+      });
+      res.json(activities);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch activities" });
+    }
+  });
+
+  // Notifications
+  app.get("/api/notifications", async (req, res) => {
+    const { userId } = req.query;
+    try {
+      const notifications = await prisma.notification.findMany({
+        where: (userId && userId !== 'undefined') ? { userId: String(userId) } : {},
+        orderBy: { createdAt: 'desc' }
+      });
+      res.json(notifications);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch notifications" });
+    }
+  });
+
+  app.patch("/api/notifications/:id/read", async (req, res) => {
+    const { id } = req.params;
+    try {
+      const notification = await prisma.notification.update({
+        where: { id },
+        data: { read: true }
+      });
+      res.json(notification);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update notification" });
     }
   });
 
