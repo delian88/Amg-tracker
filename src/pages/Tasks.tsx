@@ -93,19 +93,19 @@ const Tasks = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle2 className="w-4 h-4 text-emerald-400" />;
-      case 'overdue': return <AlertCircle className="w-4 h-4 text-red-400" />;
-      case 'in_progress': return <Clock className="w-4 h-4 text-blue-400" />;
-      default: return <Clock className="w-4 h-4 text-white/20" />;
+      case 'completed': return <CheckCircle2 className="w-4 h-4 text-emerald-600" />;
+      case 'overdue': return <AlertCircle className="w-4 h-4 text-red-600" />;
+      case 'in_progress': return <Clock className="w-4 h-4 text-blue-600" />;
+      default: return <Clock className="w-4 h-4 text-slate-300" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-500/10 text-red-400 border-red-500/20';
-      case 'high': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-      case 'medium': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-      default: return 'bg-white/5 text-white/40 border-white/10';
+      case 'urgent': return 'bg-red-50 text-red-600 border-red-100';
+      case 'high': return 'bg-amber-50 text-amber-600 border-amber-100';
+      case 'medium': return 'bg-blue-50 text-blue-600 border-blue-100';
+      default: return 'bg-slate-50 text-slate-400 border-slate-100';
     }
   };
 
@@ -117,7 +117,7 @@ const Tasks = () => {
           animate={{ opacity: 1, x: 0 }}
         >
           <h1 className="text-4xl font-bold shining-text">Tasks</h1>
-          <p className="text-white/40 mt-2">Track individual deliverables and team assignments.</p>
+          <p className="text-slate-400 mt-2">Track individual deliverables and team assignments.</p>
         </motion.div>
         <button 
           onClick={() => setShowAddModal(true)}
@@ -130,20 +130,20 @@ const Tasks = () => {
 
       {/* Task List */}
       <div className="glass-card overflow-hidden">
-        <div className="p-4 border-b border-white/5 flex flex-col md:flex-row gap-4 bg-white/5">
+        <div className="p-4 border-b border-slate-100 flex flex-col md:flex-row gap-4 bg-slate-50/50">
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
             <input 
               type="text" 
               placeholder="Search tasks..." 
-              className="w-full pl-12 pr-4 py-2.5 bg-white/5 border border-white/5 rounded-xl text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/20"
+              className="w-full pl-12 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-slate-300"
             />
           </div>
           <div className="flex gap-2">
-            <button className="px-4 py-2.5 bg-white/5 text-white/60 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-white/10 transition-colors border border-white/5">
+            <button className="px-4 py-2.5 bg-slate-50 text-slate-500 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-slate-100 transition-colors border border-slate-100">
               All Projects
             </button>
-            <button className="px-4 py-2.5 bg-white/5 text-white/60 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-white/10 transition-colors border border-white/5">
+            <button className="px-4 py-2.5 bg-slate-50 text-slate-500 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-slate-100 transition-colors border border-slate-100">
               Status
             </button>
           </div>
@@ -152,17 +152,17 @@ const Tasks = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-white/5">
-                <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Task</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Project</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Assignee</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Due Date</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Priority</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest text-right"></th>
+              <tr className="bg-slate-50/50">
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Task</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Project</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Assignee</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Due Date</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Priority</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center">
@@ -175,33 +175,33 @@ const Tasks = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.03 }}
-                  className="hover:bg-white/5 transition-colors group"
+                  className="hover:bg-slate-50 transition-colors group"
                 >
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/20 group-hover:bg-blue-500/10 group-hover:text-blue-400 group-hover:border-blue-500/20 transition-all">
+                      <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:border-blue-100 transition-all">
                         <Tag className="w-4 h-4" />
                       </div>
-                      <span className="font-semibold">{task.title}</span>
+                      <span className="font-semibold text-slate-900">{task.title}</span>
                     </div>
                   </td>
                   <td className="px-6 py-5">
-                    <span className="text-xs text-white/40 font-medium">
+                    <span className="text-xs text-slate-400 font-medium">
                       {projects.find(p => p.id === task.projectId)?.name || 'Unknown'}
                     </span>
                   </td>
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-blue-400">
+                      <div className="w-7 h-7 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600">
                         {users.find(u => u.uid === task.assignedTo)?.name?.charAt(0) || '?'}
                       </div>
-                      <span className="text-xs text-white/60 font-medium">
+                      <span className="text-xs text-slate-600 font-medium">
                         {users.find(u => u.uid === task.assignedTo)?.name || 'Unassigned'}
                       </span>
                     </div>
                   </td>
                   <td className="px-6 py-5">
-                    <div className="flex items-center gap-2 text-xs text-white/40">
+                    <div className="flex items-center gap-2 text-xs text-slate-400">
                       <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
                       {format(new Date(task.dueDate), 'MMM dd')}
                     </div>
@@ -214,12 +214,12 @@ const Tasks = () => {
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-2">
                       {getStatusIcon(task.status)}
-                      <span className="text-xs text-white/60 font-medium capitalize">{task.status.replace('_', ' ')}</span>
+                      <span className="text-xs text-slate-600 font-medium capitalize">{task.status.replace('_', ' ')}</span>
                     </div>
                   </td>
                   <td className="px-6 py-5 text-right">
-                    <button className="p-2 hover:bg-white/10 rounded-lg transition-all group-hover:translate-x-1">
-                      <ChevronRight className="w-5 h-5 text-white/20 group-hover:text-white" />
+                    <button className="p-2 hover:bg-blue-50 rounded-lg transition-all group-hover:translate-x-1">
+                      <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-blue-600" />
                     </button>
                   </td>
                 </motion.tr>
@@ -238,7 +238,7 @@ const Tasks = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowAddModal(false)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
             ></motion.div>
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -248,72 +248,72 @@ const Tasks = () => {
             >
               <div className="flex justify-between items-center mb-8">
                 <h2 className="text-2xl font-bold shining-text">New Task</h2>
-                <button onClick={() => setShowAddModal(false)} className="text-white/20 hover:text-white"><X className="w-6 h-6" /></button>
+                <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-600"><X className="w-6 h-6" /></button>
               </div>
               
               <form onSubmit={handleAddTask} className="space-y-6">
                 <div>
-                  <label className="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Task Title</label>
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Task Title</label>
                   <input 
                     required
                     value={newTitle}
                     onChange={e => setNewTitle(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all"
+                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-slate-900"
                     placeholder="e.g. Design system documentation"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Project</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Project</label>
                     <select 
                       required
                       value={newProjectId}
                       onChange={e => setNewProjectId(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
+                      className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-slate-600"
                     >
-                      <option value="" className="bg-[#020617]">Select Project</option>
+                      <option value="">Select Project</option>
                       {projects.map(p => (
-                        <option key={p.id} value={p.id} className="bg-[#020617]">{p.name}</option>
+                        <option key={p.id} value={p.id}>{p.name}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Assign To</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Assign To</label>
                     <select 
                       required
                       value={newAssignedTo}
                       onChange={e => setNewAssignedTo(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
+                      className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-slate-600"
                     >
-                      <option value="" className="bg-[#020617]">Select Assignee</option>
+                      <option value="">Select Assignee</option>
                       {users.map(u => (
-                        <option key={u.uid} value={u.uid} className="bg-[#020617]">{u.name}</option>
+                        <option key={u.uid} value={u.uid}>{u.name}</option>
                       ))}
                     </select>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Due Date</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Due Date</label>
                     <input 
                       required
                       value={newDueDate}
                       onChange={e => setNewDueDate(e.target.value)}
                       type="date" 
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
+                      className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-slate-600"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Priority</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Priority</label>
                     <select 
                       value={newPriority}
                       onChange={e => setNewPriority(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-white/60"
+                      className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 transition-all text-slate-600"
                     >
-                      <option value="low" className="bg-[#020617]">Low</option>
-                      <option value="medium" className="bg-[#020617]">Medium</option>
-                      <option value="high" className="bg-[#020617]">High</option>
-                      <option value="urgent" className="bg-[#020617]">Urgent</option>
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                      <option value="urgent">Urgent</option>
                     </select>
                   </div>
                 </div>

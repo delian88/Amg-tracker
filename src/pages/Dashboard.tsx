@@ -92,7 +92,7 @@ const Dashboard = () => {
         </div>
         <div>
           <h1 className="text-4xl font-bold shining-text">Enterprise Dashboard</h1>
-          <p className="text-white/40 mt-1">Real-time overview of Azariah Management Group operations.</p>
+          <p className="text-slate-400 mt-1">Real-time overview of Azariah Management Group operations.</p>
         </div>
       </motion.div>
 
@@ -107,16 +107,16 @@ const Dashboard = () => {
             className="glass-card p-6 group"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-xl ${stat.bg} ${stat.color} border border-white/5 group-hover:scale-110 transition-transform`}>
+              <div className={`p-3 rounded-xl ${stat.bg} ${stat.color} border border-slate-100 group-hover:scale-110 transition-transform`}>
                 <stat.icon className="w-6 h-6" />
               </div>
-              <span className="flex items-center text-[10px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded-full border border-emerald-400/20 uppercase tracking-wider">
+              <span className="flex items-center text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100 uppercase tracking-wider">
                 <TrendingUp className="w-3 h-3 mr-1" />
                 +12%
               </span>
             </div>
-            <h3 className="text-white/40 text-xs font-bold uppercase tracking-widest">{stat.label}</h3>
-            <p className="text-3xl font-bold mt-1 tabular-nums">{stat.value}</p>
+            <h3 className="text-slate-400 text-xs font-bold uppercase tracking-widest">{stat.label}</h3>
+            <p className="text-3xl font-bold mt-1 tabular-nums text-slate-900">{stat.value}</p>
           </motion.div>
         ))}
       </div>
@@ -130,18 +130,18 @@ const Dashboard = () => {
           className="glass-card p-8"
         >
           <div className="flex items-center justify-between mb-8">
-            <h3 className="font-bold text-lg">Project Progress</h3>
-            <button className="text-white/20 hover:text-white transition-colors"><MoreVertical className="w-5 h-5" /></button>
+            <h3 className="font-bold text-lg text-slate-900">Project Progress</h3>
+            <button className="text-slate-300 hover:text-slate-600 transition-colors"><MoreVertical className="w-5 h-5" /></button>
           </div>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={projectProgressData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'rgba(255,255,255,0.4)', fontSize: 10}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: 'rgba(255,255,255,0.4)', fontSize: 10}} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'rgba(0,0,0,0.4)', fontSize: 10}} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: 'rgba(0,0,0,0.4)', fontSize: 10}} />
                 <Tooltip 
-                  cursor={{fill: 'rgba(255,255,255,0.05)'}}
-                  contentStyle={{backgroundColor: 'rgba(2, 6, 23, 0.9)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)'}}
+                  cursor={{fill: 'rgba(0,0,0,0.02)'}}
+                  contentStyle={{backgroundColor: '#fff', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'}}
                 />
                 <Bar dataKey="progress" fill="#3b82f6" radius={[6, 6, 0, 0]} barSize={32} />
               </BarChart>
@@ -156,8 +156,8 @@ const Dashboard = () => {
           className="glass-card p-8"
         >
           <div className="flex items-center justify-between mb-8">
-            <h3 className="font-bold text-lg">Task Distribution</h3>
-            <button className="text-white/20 hover:text-white transition-colors"><MoreVertical className="w-5 h-5" /></button>
+            <h3 className="font-bold text-lg text-slate-900">Task Distribution</h3>
+            <button className="text-slate-300 hover:text-slate-600 transition-colors"><MoreVertical className="w-5 h-5" /></button>
           </div>
           <div className="h-80 flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
@@ -182,7 +182,7 @@ const Dashboard = () => {
               {taskStatusData.map((item) => (
                 <div key={item.name} className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full" style={{backgroundColor: item.color}}></div>
-                  <span className="text-xs font-medium text-white/60">{item.name}</span>
+                  <span className="text-xs font-medium text-slate-500">{item.name}</span>
                 </div>
               ))}
             </div>
@@ -198,53 +198,53 @@ const Dashboard = () => {
           transition={{ delay: 0.6 }}
           className="lg:col-span-2 glass-card overflow-hidden"
         >
-          <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5">
-            <h3 className="font-bold">Active Projects</h3>
-            <button className="text-blue-400 text-xs font-bold uppercase tracking-widest hover:text-blue-300 transition-colors">View All</button>
+          <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <h3 className="font-bold text-slate-900">Active Projects</h3>
+            <button className="text-blue-600 text-xs font-bold uppercase tracking-widest hover:text-blue-500 transition-colors">View All</button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-white/5">
-                  <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Project</th>
-                  <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Status</th>
-                  <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Progress</th>
-                  <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Deadline</th>
-                  <th className="px-6 py-4 text-[10px] font-bold text-white/40 uppercase tracking-widest"></th>
+                <tr className="bg-slate-50/50">
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Project</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Progress</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Deadline</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-100">
                 {projects.slice(0, 5).map((project) => (
-                  <tr key={project.id} className="hover:bg-white/5 transition-colors group">
+                  <tr key={project.id} className="hover:bg-slate-50 transition-colors group">
                     <td className="px-6 py-5">
-                      <div className="font-semibold">{project.name}</div>
-                      <div className="text-xs text-white/30">{project.client}</div>
+                      <div className="font-semibold text-slate-900">{project.name}</div>
+                      <div className="text-xs text-slate-400">{project.client}</div>
                     </td>
                     <td className="px-6 py-5">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider
-                        ${project.status === 'active' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 
-                          project.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 
-                          'bg-white/5 text-white/40 border border-white/10'}`}>
+                        ${project.status === 'active' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
+                          project.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 
+                          'bg-slate-50 text-slate-400 border border-slate-100'}`}>
                         {project.status}
                       </span>
                     </td>
                     <td className="px-6 py-5">
-                      <div className="w-full bg-white/5 rounded-full h-1.5 max-w-[100px] overflow-hidden">
+                      <div className="w-full bg-slate-100 rounded-full h-1.5 max-w-[100px] overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
                           animate={{ width: `${project.progress || 0}%` }}
                           transition={{ duration: 1, delay: 0.8 }}
-                          className="bg-blue-500 h-full"
+                          className="bg-blue-600 h-full"
                         ></motion.div>
                       </div>
-                      <span className="text-[10px] font-bold text-white/30 mt-1.5 block">{project.progress || 0}%</span>
+                      <span className="text-[10px] font-bold text-slate-400 mt-1.5 block">{project.progress || 0}%</span>
                     </td>
-                    <td className="px-6 py-5 text-xs text-white/40">
+                    <td className="px-6 py-5 text-xs text-slate-500">
                       {format(new Date(project.deadline), 'MMM dd, yyyy')}
                     </td>
                     <td className="px-6 py-5 text-right">
-                      <button className="p-2 hover:bg-white/10 rounded-lg transition-all group-hover:translate-x-1">
-                        <ArrowUpRight className="w-4 h-4 text-white/20 group-hover:text-white" />
+                      <button className="p-2 hover:bg-blue-50 rounded-lg transition-all group-hover:translate-x-1">
+                        <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-blue-600" />
                       </button>
                     </td>
                   </tr>
@@ -260,28 +260,28 @@ const Dashboard = () => {
           transition={{ delay: 0.7 }}
           className="glass-card p-8"
         >
-          <h3 className="font-bold text-lg mb-8">Recent Activity</h3>
+          <h3 className="font-bold text-lg mb-8 text-slate-900">Recent Activity</h3>
           <div className="space-y-8">
             {activities.length > 0 ? activities.map((activity) => (
               <div key={activity.id} className="flex gap-4 group">
                 <div className="relative">
-                  <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center z-10 relative group-hover:border-blue-500/50 transition-colors">
-                    <TrendingUp className="w-4 h-4 text-white/40 group-hover:text-blue-400 transition-colors" />
+                  <div className="w-8 h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center z-10 relative group-hover:border-blue-500/50 transition-colors">
+                    <TrendingUp className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
                   </div>
-                  <div className="absolute top-8 left-4 w-px h-full bg-white/5 -translate-x-1/2"></div>
+                  <div className="absolute top-8 left-4 w-px h-full bg-slate-100 -translate-x-1/2"></div>
                 </div>
                 <div>
-                  <p className="text-sm font-semibold group-hover:text-blue-300 transition-colors">{activity.action}</p>
-                  <p className="text-[10px] text-white/30 font-bold uppercase tracking-widest mt-1.5">{format(new Date(activity.timestamp), 'h:mm a')}</p>
+                  <p className="text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">{activity.action}</p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1.5">{format(new Date(activity.timestamp), 'h:mm a')}</p>
                 </div>
               </div>
             )) : (
               <div className="text-center py-12">
-                <p className="text-sm text-white/20 italic">No recent activity recorded.</p>
+                <p className="text-sm text-slate-300 italic">No recent activity recorded.</p>
               </div>
             )}
           </div>
-          <button className="w-full mt-10 py-3 text-xs font-bold uppercase tracking-widest text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded-xl hover:bg-blue-500/20 transition-all">
+          <button className="w-full mt-10 py-3 text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-50 border border-blue-100 rounded-xl hover:bg-blue-100 transition-all">
             View Audit Log
           </button>
         </motion.div>

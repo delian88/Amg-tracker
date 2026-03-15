@@ -34,11 +34,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             email: firebaseUser.email,
             photoURL: firebaseUser.photoURL
           })
-        }).then(res => res.json())
-          .then(data => setProfile(data))
-          .catch(err => console.error("Sync error:", err));
-
-        setLoading(false);
+        }).then(async res => {
+          if (res.status === 403) {
+            const errorData = await res.json();
+            await auth.signOut();
+            throw new Error(errorData.error || "Access denied");
+          }
+          return res.json();
+        })
+          .then(data => {
+            setProfile(data);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error("Sync error:", err);
+            setProfile(null);
+            setLoading(false);
+          });
       } else {
         setProfile(null);
         setLoading(false);

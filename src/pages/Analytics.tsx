@@ -67,7 +67,7 @@ const Analytics = () => {
         animate={{ opacity: 1, y: 0 }}
       >
         <h1 className="text-4xl font-bold shining-text">Advanced Analytics</h1>
-        <p className="text-white/40 mt-2">Deep dive into Azariah Management Group performance metrics.</p>
+        <p className="text-slate-400 mt-2">Deep dive into Azariah Management Group performance metrics.</p>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -77,7 +77,7 @@ const Analytics = () => {
           transition={{ delay: 0.1 }}
           className="glass-card p-6"
         >
-          <h3 className="text-lg font-bold mb-6 text-white/80">Project Status Distribution</h3>
+          <h3 className="text-lg font-bold mb-6 text-slate-900">Project Status Distribution</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -94,11 +94,10 @@ const Analytics = () => {
                   {projectStatusData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
-                  {projectStatusData.length === 0 && <Cell fill="#ffffff10" />}
+                  {projectStatusData.length === 0 && <Cell fill="#f1f5f9" />}
                 </Pie>
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '12px', color: '#fff' }}
-                  itemStyle={{ color: '#fff' }}
+                  contentStyle={{ backgroundColor: '#fff', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -111,16 +110,16 @@ const Analytics = () => {
           transition={{ delay: 0.2 }}
           className="glass-card p-6"
         >
-          <h3 className="text-lg font-bold mb-6 text-white/80">Team Workload (Tasks Assigned)</h3>
+          <h3 className="text-lg font-bold mb-6 text-slate-900">Team Workload (Tasks Assigned)</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={[{name: 'Team A', tasks: 12}, {name: 'Team B', tasks: 19}, {name: 'Team C', tasks: 8}]}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff05" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#ffffff40', fontSize: 12 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#ffffff40', fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'rgba(0,0,0,0.4)', fontSize: 12 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(0,0,0,0.4)', fontSize: 12 }} />
                 <Tooltip 
-                  cursor={{ fill: '#ffffff05' }}
-                  contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '12px', color: '#fff' }}
+                  cursor={{ fill: 'rgba(0,0,0,0.02)' }}
+                  contentStyle={{ backgroundColor: '#fff', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
                 />
                 <Bar dataKey="tasks" fill="#3b82f6" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -135,7 +134,7 @@ const Analytics = () => {
         transition={{ delay: 0.3 }}
         className="glass-card p-6"
       >
-        <h3 className="text-lg font-bold mb-6 text-white/80">System Performance Trend</h3>
+        <h3 className="text-lg font-bold mb-6 text-slate-900">System Performance Trend</h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={[
@@ -148,15 +147,15 @@ const Analytics = () => {
             ]}>
               <defs>
                 <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1}/>
                   <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff05" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#ffffff40', fontSize: 12 }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fill: '#ffffff40', fontSize: 12 }} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'rgba(0,0,0,0.4)', fontSize: 12 }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(0,0,0,0.4)', fontSize: 12 }} />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '12px', color: '#fff' }}
+                contentStyle={{ backgroundColor: '#fff', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
               />
               <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorValue)" />
             </AreaChart>
