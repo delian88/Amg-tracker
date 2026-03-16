@@ -3,6 +3,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Zap, ShieldCheck, Globe, Mail, Lock } from 'lucide-react';
 import { motion } from 'motion/react';
+import { toast } from 'sonner';
 
 const Login = () => {
   const { user, loading, login } = useAuth();
@@ -17,11 +18,15 @@ const Login = () => {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    const toastId = toast.loading("Signing in...");
     try {
       await login(email, password);
+      toast.success("Welcome back!", { id: toastId });
       navigate('/');
     } catch (error: any) {
-      setError(error.message || "Invalid credentials. Please try again.");
+      const message = error.message || "Invalid credentials. Please try again.";
+      setError(message);
+      toast.error(message, { id: toastId });
     }
   };
 

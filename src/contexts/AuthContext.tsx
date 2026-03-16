@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserProfile } from '../types';
+import { toast } from 'sonner';
 
 interface AuthContextType {
   user: { email: string; uid: string } | null;
@@ -55,6 +56,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (res.ok) {
         const data = await res.json();
         setProfile(data);
+      } else {
+        const errorData = await res.json();
+        toast.error(errorData.error || "Failed to sync profile");
       }
     } catch (err) {
       console.error("Sync error:", err);
@@ -72,7 +76,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(userData);
       localStorage.setItem('amg_user', JSON.stringify(userData));
       await syncProfile(userData);
+      toast.success(`Welcome back, ${foundUser.name}!`);
     } else {
+      toast.error("Invalid email or password");
       throw new Error("Invalid email or password");
     }
   };
@@ -81,6 +87,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     setProfile(null);
     localStorage.removeItem('amg_user');
+    toast.info("You have been signed out.");
   };
 
   return (

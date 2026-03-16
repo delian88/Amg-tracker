@@ -103,6 +103,30 @@ async function startServer() {
     }
   });
 
+  app.post("/api/users", async (req, res) => {
+    const { name, email, role } = req.body;
+    try {
+      const normalizedEmail = email.toLowerCase();
+      const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+      if (existingUser) {
+        return res.status(400).json({ error: "User with this email already exists" });
+      }
+
+      const user = await prisma.user.create({
+        data: {
+          id: `manual_${Date.now()}`, // Generate a temporary ID for manual users
+          name,
+          email: normalizedEmail,
+          role
+        }
+      });
+      res.json(user);
+    } catch (error) {
+      console.error("User creation error:", error);
+      res.status(500).json({ error: "Failed to create user" });
+    }
+  });
+
   // Projects
   app.get("/api/projects", async (req, res) => {
     try {
